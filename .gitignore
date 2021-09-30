@@ -108,3 +108,7 @@ examples/configs/*credentials.json
 # Legacy build tools
 /requirements.txt
 /setup.py
+
+# Snyk
+/.dccache
+/.dcignore

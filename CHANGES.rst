@@ -1,7 +1,60 @@
 Changes
 =======
 
-x.xx.x (xxxx-xx-xx)
+0.21.7 (2021-08-24)
+-------------------
+- Pins ``aiobotocore`` to use up to 1.3.x releases, since the 1.4.x
+  versions session handling currently causes issues when used.
+
+
+0.21.6 (2021-08-17)
+-------------------
+- Now pins the ``tzlocal`` version to not use the 3.x releases as it would
+  currently break services using scheduled functions (the ``@schedule``
+  decorator, et al) if ``tzlocal`` 3.0 is installed.
+
+- Updated classifiers to identify that the library works on Python 3.10.
+
+- Added the new ``Framework :: aiohttp`` classifier.
+
+
+0.21.5 (2021-08-04)
+-------------------
+- If a ``PYTHONPATH`` environment value is set and a service is started
+  without the ``--production`` flag, the paths specified in ``PYTHONPATH``
+  will be added to the list of directories to watch for code changes and
+  in the event of any changes done to files on those directories, the
+  service will restart. Previously only code changes in the directory or
+  sub directory of the current working directory + the directory of the
+  started service (or services) were monitored.
+
+- The ``topic`` argument to the ``@tomodachi.aws_sns_sqs`` decorator is
+  now optional, which is useful if subscribing to a SQS queue where the SNS
+  topic or the topic subscriptions are set up apart from the service code,
+  for example during deployment or as infra.
+
+
+0.21.4 (2021-07-26)
+-------------------
+- Encryption at rest for AWS SNS and/or AWS SQS which can optionally be configured by specifying the KMS key alias or KMS key id as a tomodachi service option ``options.aws_sns_sqs.sns_kms_master_key_id`` (to configure encryption at rest on the SNS topics for which the tomodachi service handles the SNS -> SQS subscriptions) and/or ``options.aws_sns_sqs.sqs_kms_master_key_id`` (to configure encryption at rest for the SQS queues which the service is consuming).
+
+  Note that an option value set to empty string (``""``) or ``False`` will unset the KMS master key id and thus disable encryption at rest. (The AWS APIs for SNS and SQS uses empty string value to the KMSMasterKeyId attribute to disable encryption with KMS if it was previously enabled).
+
+  If instead an option is completely unset or set to ``None`` value no changes will be done to the KMS related attributes on an existing topic or queue.
+
+  If it's expected that the services themselves, via their IAM credentials or assumed role, are responsible for creating queues and topics, these options could be used to provide encryption at rest without additional manual intervention
+
+  *However, do not use these options if you instead are using IaC tooling to handle the topics, queues and subscriptions or that they for example are created / updated as a part of deployments. To not have the service update any attributes keep the options unset or set to a* ``None`` *value.*
+
+  | https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html
+  | https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms.
+
+- Fixes an issue where a GET request to an endpoint serving static files via ``@http_static`` could be crafted to probe the directory structure setup (but not read file content outside of its permitted path), by applying directory traversal techniques. This could expose the internal directory structure of the file system in the container or environment that the service is hosted on. Limited to if ``@http_static`` handlers were used within the service and those endpoints could be accessed.
+
+- Additional validation for the path used in the ``@http_static`` decorator to prevent a developer from accidentally supplying a ``"/"`` or ``""`` value to the ``path`` argument, which in those cases could lead to unintended files being exposed via the static file handler.
+
+
+0.21.3 (2021-06-30)
 -------------------
 - Fixes an issue causing a ``UnboundLocalError`` if an incoming
   message to a service that had specified the enveloping
@@ -11,6 +64,17 @@ x.xx.x (xxxx-xx-xx)
 
 - Fixes error message strings for some cases of AWS SNS + SQS
   related cases of ``botocore.exceptions.ClientError``.
+
+- Fixes the issue where some definitions of filter policies would
+  result in an error when running mypy – uses ``Sequence`` instead
+  of ``List`` in type hint definition for filter policy input types.
+
+- Internal updates for developer experience – refactoring and
+  improvements for future code analysis and better support for
+  IntelliSense.
+
+- Updates to install typeshed generated type hint annotation stubs
+  and updates to support ``mypy==0.910``.
 
 
 0.21.2 (2021-02-16)
@@ -126,7 +190,7 @@ x.xx.x (xxxx-xx-xx)
 0.20.2 (2020-11-16)
 -------------------
 - Fixes an issue which could cause hot reloading of services to break
-  (for eaxmple when using Protocol Buffers), due to the change in
+  (for example when using Protocol Buffers), due to the change in
   pre-initialized modules from the ``tomodachi`` 0.20.0 release.
 
 
@@ -309,7 +373,7 @@ x.xx.x (xxxx-xx-xx)
 - Added ``aiodns`` as an optional installation, as it's recommended for
   running DNS resolution on the event loop when using ``aiohttp``.
 
-- Updated identifiers for support of Python 3.9.
+- Updated classifiers for support of Python 3.9.
 
 - Dropped support for Python 3.6.
 

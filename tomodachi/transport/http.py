@@ -11,6 +11,7 @@ import time
 import uuid
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, SupportsInt, Tuple, Union, cast
 
+import yarl
 from aiohttp import WSMsgType
 from aiohttp import __version__ as aiohttp_version
 from aiohttp import hdrs, web, web_protocol, web_server, web_urldispatcher
@@ -417,30 +418,49 @@ class HttpTransport(Invoker):
             pattern = r"^{}$".format(re.sub(r"\$$", "", re.sub(r"^\^?(.*)$", r"\1", base_url)))
         compiled_pattern = re.compile(pattern)
 
-        if path.startswith("/"):
-            path = os.path.dirname(path)
-        else:
-            path = "{}/{}".format(os.path.dirname(context.get("context", {}).get("_service_file_path")), path)
+        if path in ("", "/"):
+            # Hopefully noone wants to do this intentionally, and if anyone accidentally does we'll catch it here
+            raise Exception("Invalid path '{}' for static route".format(path))
+
+        if not path.startswith("/"):
+            path = "{}/{}".format(os.path.dirname(context.get("context", {}).get("_service_file_path", "")), path)
 
         if not path.endswith("/"):
             path = "{}/".format(path)
 
+        if os.path.realpath(path) == "/":
+            raise Exception("Invalid path '{}' for static route resolves to '/'".format(path))
+
         async def handler(request: web.Request) -> Union[web.Response, web.FileResponse]:
-            result = compiled_pattern.match(request.path)
+            normalized_request_path = yarl.URL._normalize_path(request.path)
+            if not normalized_request_path.startswith("/"):
+                raise web.HTTPNotFound()
+
+            result = compiled_pattern.match(normalized_request_path)
             filename = result.groupdict()["filename"] if result else ""
-            filepath = "{}{}".format(path, filename)
+
+            basepath = os.path.realpath(path)
+            realpath = os.path.realpath("{}/{}".format(basepath, filename))
 
             try:
-                if (
-                    os.path.commonprefix((os.path.realpath(filepath), os.path.realpath(path))) != os.path.realpath(path)
-                    or os.path.isdir(filepath)
-                    or not os.path.exists(filepath)
+                if any(
+                    [
+                        not realpath,
+                        not basepath,
+                        realpath == basepath,
+                        os.path.commonprefix((realpath, basepath)) != basepath,
+                        not os.path.exists(realpath),
+                        not os.path.isdir(basepath),
+                        basepath == "/",
+                        os.path.isdir(realpath),
+                    ]
                 ):
                     raise web.HTTPNotFound()
 
-                pathlib.Path(filepath).open("r")
+                # deepcode ignore PT: Input data to pathlib.Path is sanitized
+                pathlib.Path(realpath).open("r")
 
-                response: Union[web.Response, web.FileResponse] = FileResponse(path=filepath, chunk_size=256 * 1024)
+                response: Union[web.Response, web.FileResponse] = FileResponse(path=realpath, chunk_size=256 * 1024)
                 return response
             except PermissionError:
                 raise web.HTTPForbidden()
@@ -827,18 +847,27 @@ class HttpTransport(Invoker):
                             use_keepalive = False
                             if context["_http_tcp_keepalive"] and request.keep_alive and request.protocol:
                                 use_keepalive = True
-                                if not context["_http_keepalive_timeout"] or context["_http_keepalive_timeout"] <= 0:
-                                    use_keepalive = False
-                                elif (
-                                    context["_http_max_keepalive_requests"]
-                                    and request.protocol._request_count >= context["_http_max_keepalive_requests"]
-                                ):
-                                    use_keepalive = False
-                                elif (
-                                    context["_http_max_keepalive_time"]
-                                    and time.time()
-                                    > getattr(request.protocol, "_connection_start_time", 0)
-                                    + context["_http_max_keepalive_time"]
+                                if any(
+                                    [
+                                        # keep-alive timeout not set or is non-positive
+                                        (
+                                            not context["_http_keepalive_timeout"]
+                                            or context["_http_keepalive_timeout"] <= 0
+                                        ),
+                                        # keep-alive request count has passed configured max for this connection
+                                        (
+                                            context["_http_max_keepalive_requests"]
+                                            and request.protocol._request_count
+                                            >= context["_http_max_keepalive_requests"]
+                                        ),
+                                        # keep-alive time has passed configured max for this connection
+                                        (
+                                            context["_http_max_keepalive_time"]
+                                            and time.time()
+                                            > getattr(request.protocol, "_connection_start_time", 0)
+                                            + context["_http_max_keepalive_time"]
+                                        ),
+                                    ]
                                 ):
                                     use_keepalive = False
 
@@ -998,7 +1027,7 @@ class HttpTransport(Invoker):
                     "Bad value for http option keepalive_timeout: {}".format(str(keepalive_timeout_option))
                 )
             try:
-                keepalive_timeout = int(keepalive_timeout_option)
+                keepalive_timeout = int(keepalive_timeout_option) if keepalive_timeout_option is not None else 0
             except Exception:
                 raise ValueError(
                     "Bad value for http option keepalive_timeout: {}".format(str(keepalive_timeout_option))
