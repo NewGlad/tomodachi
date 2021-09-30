@@ -45,7 +45,7 @@ Changelog = "https://github.com/kalaspuff/tomodachi/blob/master/CHANGES.rst"
 python = "^3.7"
 
 aioamqp = ">=0.13.0, <0.15.0"
-aiobotocore = ">=0.10.4, <1.4.0"
+aiobotocore = "<1.0"
 tzlocal = ">=1.4,<4.0"
 pytz = "*"
 cchardet = ">=2.1.6"
@@ -57,7 +57,7 @@ asahi = "^0.1.0"
 typing-extensions = { version = ">=3.7.4", markers = "python_version < \"3.8\"" }
 
 # derived from aiobotocore for dependency resolution speed in same cases.
-# botocore = ">=1.12.252"
+botocore = "<1.15.16,>=1.15.3"
 
 # extras
 protobuf = { version = ">=3.13.0", optional = true }
