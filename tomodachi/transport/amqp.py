@@ -366,6 +366,7 @@ class AmqpTransport(Invoker):
         virtualhost = context.get("options", {}).get("amqp", {}).get("virtualhost", "/")
         ssl = context.get("options", {}).get("amqp", {}).get("ssl", False)
         heartbeat = context.get("options", {}).get("amqp", {}).get("heartbeat", 60)
+        client_properties = context.get("options", {}).get("amqp", {}).get("client_properties", {})
 
         try:
             protocol: Any
@@ -377,6 +378,7 @@ class AmqpTransport(Invoker):
                 virtualhost=virtualhost,
                 ssl=ssl,
                 heartbeat=heartbeat,
+                client_properties=client_properties
             )
             cls.protocol = protocol
             cls.transport = transport
