@@ -1,20 +1,13 @@
 [[package]]
 name = "aioamqp"
-version = "0.14.0"
+version = "0.13.0"
 description = "AMQP implementation using asyncio"
 category = "main"
 optional = false
-python-versions = ">=3.7"
-develop = false
+python-versions = "*"
 
 [package.dependencies]
-pamqp = ">=3.1.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/Polyconseil/aioamqp"
-reference = "master"
-resolved_reference = "e2028401be975c93ffa1c56540fb94e562a9f7e4"
+pamqp = ">=2.2.0,<3"
 
 [[package]]
 name = "aiobotocore"
@@ -129,14 +122,6 @@ description = "Enhance the standard unittest package with features for testing a
 category = "main"
 optional = false
 python-versions = ">=3.5"
-
-[[package]]
-name = "atomicwrites"
-version = "1.4.0"
-description = "Atomic file writes."
-category = "dev"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "attrs"
@@ -460,15 +445,14 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pamqp"
-version = "3.1.0"
+version = "2.3.0"
 description = "RabbitMQ Focused AMQP low-level library"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = "*"
 
 [package.extras]
-codegen = ["lxml", "requests", "yapf"]
-testing = ["coverage", "flake8", "flake8-comprehensions", "flake8-deprecated", "flake8-import-order", "flake8-print", "flake8-quotes", "flake8-rst-docstrings", "flake8-tuple", "yapf"]
+codegen = ["lxml"]
 
 [[package]]
 name = "pathspec"
@@ -579,9 +563,7 @@ optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-atomicwrites = {version = ">=1.0", markers = "sys_platform == \"win32\""}
 attrs = ">=19.2.0"
-colorama = {version = "*", markers = "sys_platform == \"win32\""}
 importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
 iniconfig = "*"
 packaging = "*"
@@ -820,10 +802,13 @@ uvloop = ["uvloop"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "74c2876871686406fdd489d82704ea0d81a3cb2eedfb458db566690931c2cf91"
+content-hash = "33ef8850e203334cf94f431ffd2700d8b33721623f2f44bd0d2e69d5e8546d8f"
 
 [metadata.files]
-aioamqp = []
+aioamqp = [
+    {file = "aioamqp-0.13.0-py35.py36.py37-none-any.whl", hash = "sha256:7bc83a7d6dbcc9b77db8e0f19f725f332618c714aae7bc51b1b382685de80f9e"},
+    {file = "aioamqp-0.13.0.tar.gz", hash = "sha256:ced0d2bb0054809b37b0636da34fc7cda23d66943fb5f9f0610555988cf347b2"},
+]
 aiobotocore = [
     {file = "aiobotocore-0.12.0-py3-none-any.whl", hash = "sha256:b2740780c003953887130ecf1f8ae4b81efff84993deef864dc6f98115c27f1d"},
     {file = "aiobotocore-0.12.0.tar.gz", hash = "sha256:f9a92b6fc20f40d42c0402bd597b09853d76ed40d9c3df7a3d32dbafb7cdc631"},
@@ -929,10 +914,6 @@ async-timeout = [
 asynctest = [
     {file = "asynctest-0.13.0-py3-none-any.whl", hash = "sha256:5da6118a7e6d6b54d83a8f7197769d046922a44d2a99c21382f0a6e4fadae676"},
     {file = "asynctest-0.13.0.tar.gz", hash = "sha256:c27862842d15d83e6a34eb0b2866c323880eb3a75e4485b079ea11748fd77fac"},
-]
-atomicwrites = [
-    {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
-    {file = "atomicwrites-1.4.0.tar.gz", hash = "sha256:ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a"},
 ]
 attrs = [
     {file = "attrs-21.4.0-py2.py3-none-any.whl", hash = "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4"},
@@ -1390,7 +1371,8 @@ packaging = [
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 pamqp = [
-    {file = "pamqp-3.1.0.tar.gz", hash = "sha256:e4f0886d72c6166637a5513626148bf5a7e818073a558980e9aaed8b4ccf30da"},
+    {file = "pamqp-2.3.0-py2.py3-none-any.whl", hash = "sha256:2f81b5c186f668a67f165193925b6bfd83db4363a6222f599517f29ecee60b02"},
+    {file = "pamqp-2.3.0.tar.gz", hash = "sha256:5cd0f5a85e89f20d5f8e19285a1507788031cfca4a9ea6f067e3cf18f5e294e8"},
 ]
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},
