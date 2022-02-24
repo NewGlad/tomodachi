@@ -44,7 +44,7 @@ Changelog = "https://github.com/kalaspuff/tomodachi/blob/master/CHANGES.rst"
 [tool.poetry.dependencies]
 python = "^3.7"
 
-aioamqp = "<0.14.0"
+aioamqp = {git = "https://github.com/Polyconseil/aioamqp", rev = "e202840"}
 aiobotocore = "<1.0"
 tzlocal = ">=1.4,<4.0"
 pytz = "*"

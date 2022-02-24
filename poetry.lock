@@ -1,13 +1,20 @@
 [[package]]
 name = "aioamqp"
-version = "0.13.0"
+version = "0.14.0"
 description = "AMQP implementation using asyncio"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
+develop = false
 
 [package.dependencies]
-pamqp = ">=2.2.0,<3"
+pamqp = ">=3.1.0"
+
+[package.source]
+type = "git"
+url = "https://github.com/Polyconseil/aioamqp"
+reference = "e202840"
+resolved_reference = "e2028401be975c93ffa1c56540fb94e562a9f7e4"
 
 [[package]]
 name = "aiobotocore"
@@ -62,7 +69,7 @@ speedups = ["aiodns", "brotli", "cchardet"]
 
 [[package]]
 name = "aioitertools"
-version = "0.9.0"
+version = "0.10.0"
 description = "itertools and builtins for AsyncIO and mixed iterables"
 category = "main"
 optional = false
@@ -445,14 +452,15 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pamqp"
-version = "2.3.0"
+version = "3.1.0"
 description = "RabbitMQ Focused AMQP low-level library"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 
 [package.extras]
-codegen = ["lxml"]
+codegen = ["lxml", "requests", "yapf"]
+testing = ["coverage", "flake8", "flake8-comprehensions", "flake8-deprecated", "flake8-import-order", "flake8-print", "flake8-quotes", "flake8-rst-docstrings", "flake8-tuple", "yapf"]
 
 [[package]]
 name = "pathspec"
@@ -802,13 +810,10 @@ uvloop = ["uvloop"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "33ef8850e203334cf94f431ffd2700d8b33721623f2f44bd0d2e69d5e8546d8f"
+content-hash = "7a0fbf90b0ac1068f06a6b0a2f241a47b11d609d9732fc0cc540d691c2ee2448"
 
 [metadata.files]
-aioamqp = [
-    {file = "aioamqp-0.13.0-py35.py36.py37-none-any.whl", hash = "sha256:7bc83a7d6dbcc9b77db8e0f19f725f332618c714aae7bc51b1b382685de80f9e"},
-    {file = "aioamqp-0.13.0.tar.gz", hash = "sha256:ced0d2bb0054809b37b0636da34fc7cda23d66943fb5f9f0610555988cf347b2"},
-]
+aioamqp = []
 aiobotocore = [
     {file = "aiobotocore-0.12.0-py3-none-any.whl", hash = "sha256:b2740780c003953887130ecf1f8ae4b81efff84993deef864dc6f98115c27f1d"},
     {file = "aiobotocore-0.12.0.tar.gz", hash = "sha256:f9a92b6fc20f40d42c0402bd597b09853d76ed40d9c3df7a3d32dbafb7cdc631"},
@@ -892,8 +897,8 @@ aiohttp = [
     {file = "aiohttp-3.8.1.tar.gz", hash = "sha256:fc5471e1a54de15ef71c1bc6ebe80d4dc681ea600e68bfd1cbce40427f0b7578"},
 ]
 aioitertools = [
-    {file = "aioitertools-0.9.0-py3-none-any.whl", hash = "sha256:70a643f07be2b0437674bde442548e18a6d33a653d23bc4be9dc9ba6f3116f94"},
-    {file = "aioitertools-0.9.0.tar.gz", hash = "sha256:0fd203d53192193973cae71fa14f0d3689328388ad41ca4a4e03e433f98871ac"},
+    {file = "aioitertools-0.10.0-py3-none-any.whl", hash = "sha256:a2ea2a39ebf272a2fbb58bfdb73e1daeeb6686edbbc8082215dfc8b8ffffa6e8"},
+    {file = "aioitertools-0.10.0.tar.gz", hash = "sha256:7d1d1d4a03d462c5a0840787d3df098f125847e0d38b833b30f8f8cbc45a1420"},
 ]
 aiosignal = [
     {file = "aiosignal-1.2.0-py3-none-any.whl", hash = "sha256:26e62109036cd181df6e6ad646f91f0dcfd05fe16d0cb924138ff2ab75d64e3a"},
@@ -1371,8 +1376,7 @@ packaging = [
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 pamqp = [
-    {file = "pamqp-2.3.0-py2.py3-none-any.whl", hash = "sha256:2f81b5c186f668a67f165193925b6bfd83db4363a6222f599517f29ecee60b02"},
-    {file = "pamqp-2.3.0.tar.gz", hash = "sha256:5cd0f5a85e89f20d5f8e19285a1507788031cfca4a9ea6f067e3cf18f5e294e8"},
+    {file = "pamqp-3.1.0.tar.gz", hash = "sha256:e4f0886d72c6166637a5513626148bf5a7e818073a558980e9aaed8b4ccf30da"},
 ]
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},
