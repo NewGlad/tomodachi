@@ -349,7 +349,7 @@ class AmqpTransport(Invoker):
         exchange_name = exchange_name or context.get("options", {}).get("amqp", {}).get("exchange_name", "amq.topic")
 
         context["_amqp_subscribers"] = context.get("_amqp_subscribers", [])
-        context["_amqp_subscribers"].append((routing_key, exchange_name, competing, queue_name, func, handler))
+        context["_amqp_subscribers"].append((routing_key, exchange_name, competing, queue_name, func, handler, kwargs))
 
         start_func = cls.subscribe(obj, context)
         return (await start_func) if start_func else None
@@ -542,11 +542,12 @@ class AmqpTransport(Invoker):
 
                 return _callback
 
-            for routing_key, exchange_name, competing, queue_name, func, handler in context.get(
+            for routing_key, exchange_name, competing, queue_name, func, handler, kwargs in context.get(
                 "_amqp_subscribers", []
             ):
                 queue_name = await declare_queue(
-                    routing_key, func, exchange_name=exchange_name, competing_consumer=competing, queue_name=queue_name
+                    routing_key, func, exchange_name=exchange_name, 
+                    competing_consumer=competing, queue_name=queue_name, **kwargs
                 )
                 await channel.basic_consume(callback(routing_key, handler), queue_name=queue_name)
 
