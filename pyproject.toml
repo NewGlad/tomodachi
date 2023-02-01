@@ -48,7 +48,6 @@ aioamqp = {git = "https://github.com/Polyconseil/aioamqp", rev = "e202840"}
 aiobotocore = "<1.0"
 tzlocal = ">=1.4,<4.0"
 pytz = "*"
-cchardet = ">=2.1.6"
 aiohttp = ">=3.5.4, <4.0.0"
 colorama = ">=0.3.9, <0.5.0"
 asahi = "^0.1.0"
@@ -74,9 +73,9 @@ uvloop = ["uvloop"]
 aiodns = ["aiodns"]
 brotli = ["Brotli"]
 
-aws = ["asahi-extras"]        # ["aiobotocore", "botocore", "aiohttp", "cchardet"]
+aws = ["asahi-extras"]        # ["aiobotocore", "botocore", "aiohttp"]
 amqp = ["asahi-extras"]       # ["aioamqp"]
-http = ["asahi-extras"]       # ["aiohttp", "cchardet"]
+http = ["asahi-extras"]       # ["aiohttp"]
 scheduler = ["asahi-extras"]  # ["tzlocal", "pytz"]
 color = ["asahi-extras"]      # ["colorama"]
 
