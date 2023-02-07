@@ -45,7 +45,7 @@ Changelog = "https://github.com/kalaspuff/tomodachi/blob/master/CHANGES.rst"
 python = "^3.7"
 
 aioamqp = ">=0.15.0"
-aiobotocore = "<1.0"
+aiobotocore = ">=2.4.2"
 pytz = "*"
 aiohttp = ">=3.5.4, <4.0.0"
 colorama = ">=0.3.9, <0.5.0"
