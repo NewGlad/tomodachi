@@ -27,7 +27,7 @@ python-versions = ">=3.6"
 [package.dependencies]
 aiohttp = ">=3.3.1"
 aioitertools = ">=0.5.1"
-botocore = ">=1.15.3,<1.15.16"
+botocore = "~=1.20.0"
 wrapt = ">=1.10.10"
 
 [package.extras]
