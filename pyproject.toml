@@ -55,7 +55,7 @@ asahi = "^0.1.0"
 typing-extensions = { version = ">=3.7.4", markers = "python_version < \"3.8\"" }
 
 # derived from aiobotocore for dependency resolution speed in same cases.
-botocore = ">=1.29.65"
+botocore = "~=1.20.0"
 
 # extras
 protobuf = { version = ">=3.13.0", optional = true }
