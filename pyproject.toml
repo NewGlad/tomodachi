@@ -44,7 +44,7 @@ Changelog = "https://github.com/kalaspuff/tomodachi/blob/master/CHANGES.rst"
 [tool.poetry.dependencies]
 python = "^3.7"
 
-aioamqp = {git = "https://github.com/Polyconseil/aioamqp", rev = "e202840"}
+aioamqp = ">=0.15.0"
 aiobotocore = "<1.0"
 pytz = "*"
 aiohttp = ">=3.5.4, <4.0.0"
@@ -55,7 +55,7 @@ asahi = "^0.1.0"
 typing-extensions = { version = ">=3.7.4", markers = "python_version < \"3.8\"" }
 
 # derived from aiobotocore for dependency resolution speed in same cases.
-botocore = "<1.15.16,>=1.15.3"
+botocore = ">=1.29.65"
 
 # extras
 protobuf = { version = ">=3.13.0", optional = true }
